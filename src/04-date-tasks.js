@@ -19,8 +19,8 @@
  *    'Tue, 26 Jan 2016 13:48:02 GMT' => Date()
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
-function parseDataFromRfc2822(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromRfc2822(value) {
+  return new Date(value).valueOf();
 }
 
 /**
@@ -34,8 +34,8 @@ function parseDataFromRfc2822(/* value */) {
  *    '2016-01-19T16:07:37+00:00'    => Date()
  *    '2016-01-19T08:07:37Z' => Date()
  */
-function parseDataFromIso8601(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromIso8601(value) {
+  return new Date(value).valueOf();
 }
 
 
@@ -53,8 +53,10 @@ function parseDataFromIso8601(/* value */) {
  *    Date(2012,1,1)    => true
  *    Date(2015,1,1)    => false
  */
-function isLeapYear(/* date */) {
-  throw new Error('Not implemented');
+function isLeapYear(date) {
+  return ((date.getFullYear() % 4 === 0)
+   && (date.getFullYear() % 100 !== 0))
+    || (date.getFullYear() % 400 === 0);
 }
 
 
@@ -73,10 +75,13 @@ function isLeapYear(/* date */) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,10,0,0,250)     => "00:00:00.250"
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
-function timeSpanToString(/* startDate, endDate */) {
-  throw new Error('Not implemented');
+function timeSpanToString(startDate, endDate) {
+  const hour = `${Math.floor((new Date(endDate - startDate) / (1000 * 60 * 60)) % 24)}`.padStart(2, '0');
+  const min = `${Math.floor((new Date(endDate - startDate) / (1000 * 60)) % 60)}`.padStart(2, '0');
+  const sec = `${Math.floor((new Date(endDate - startDate) / (1000)) % 60)}`.padStart(2, '0');
+  const milisec = `${new Date(endDate - startDate).getTime() % 1000}`.padStart(3, '0');
+  return `${hour}:${min}:${sec}.${milisec}`;
 }
-
 
 /**
  * Returns the angle (in radians) between the hands of an analog clock
@@ -97,7 +102,6 @@ function timeSpanToString(/* startDate, endDate */) {
 function angleBetweenClockHands(/* date */) {
   throw new Error('Not implemented');
 }
-
 
 module.exports = {
   parseDataFromRfc2822,
